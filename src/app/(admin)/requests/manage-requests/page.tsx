@@ -1,33 +1,33 @@
 "use client";
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  ArrowLeft, Bell, Settings, User, MapPin, 
+import {
+  ArrowLeft, Bell, Settings, User, MapPin,
   Calendar, FileText, Send, Paperclip, ChevronDown, Download, AlertCircle, X,
   LayoutDashboard, ClipboardList, PlusCircle
 } from 'lucide-react';
 import { AssetBreadcrumb } from '@/components/layout/AssetBreadcrumb';
 
 // --- Sub-component: ConfirmSaveModal ---
-const ConfirmSaveModal = ({ 
-  isOpen, 
-  onClose, 
-  onConfirm, 
-  title = "ยืนยันการบันทึกข้อมูล", 
-  message = "คุณต้องการบันทึกการเปลี่ยนแปลงสถานะและเจ้าหน้าที่ผู้รับผิดชอบใช่หรือไม่?" 
-}: { 
-  isOpen: boolean; 
-  onClose: () => void; 
-  onConfirm: () => void; 
-  title?: string; 
-  message?: string; 
+const ConfirmSaveModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  title = "ยืนยันการบันทึกข้อมูล",
+  message = "คุณต้องการบันทึกการเปลี่ยนแปลงสถานะและเจ้าหน้าที่ผู้รับผิดชอบใช่หรือไม่?"
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title?: string;
+  message?: string;
 }) => {
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
-      <div 
-        className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity animate-in fade-in duration-300" 
+      <div
+        className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity animate-in fade-in duration-300"
         onClick={onClose}
       />
       <div className="relative bg-white rounded-[2.5rem] w-full max-w-md shadow-2xl p-10 transform transition-all animate-in fade-in zoom-in duration-200">
@@ -41,7 +41,7 @@ const ConfirmSaveModal = ({
           <h3 className="text-2xl font-black text-slate-800 mb-3">{title}</h3>
           <p className="text-slate-500 text-sm leading-relaxed mb-10 px-4">{message}</p>
           <div className="flex flex-col w-full space-y-3">
-            <button 
+            <button
               onClick={onConfirm}
               className="w-full bg-[#E9652B] hover:bg-orange-600 text-white font-black py-4 rounded-2xl shadow-lg shadow-orange-200 transition-all active:scale-[0.98]"
             >
@@ -77,35 +77,26 @@ const AdminRequestDetail = () => {
   return (
     <div className="flex min-h-screen bg-[#F8F9FB] font-sans">
       {/* Confirm Modal */}
-      <ConfirmSaveModal 
-        isOpen={isConfirmOpen} 
-        onClose={() => setIsConfirmOpen(false)} 
-        onConfirm={handleConfirmSave} 
+      <ConfirmSaveModal
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={handleConfirmSave}
       />
 
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r flex flex-col sticky top-0 h-screen">
         <div className="p-6"><h1 className="text-2xl font-bold text-[#E9652B]">Asset SUT</h1></div>
         <nav className="flex-1 px-4 space-y-1">
-            <SidebarNavItem label="แดชบอร์ด" icon={<LayoutDashboard size={18}/>} />
-            <SidebarNavItem label="รายการคำร้อง" icon={<ClipboardList size={18}/>} active />
-            <SidebarNavItem label="แจ้งเรื่องใหม่" icon={<PlusCircle size={18}/>} />
+          <SidebarNavItem label="แดชบอร์ด" icon={<LayoutDashboard size={18} />} />
+          <SidebarNavItem label="รายการคำร้อง" icon={<ClipboardList size={18} />} active />
+          <SidebarNavItem label="แจ้งเรื่องใหม่" icon={<PlusCircle size={18} />} />
         </nav>
       </aside>
 
       <div className="flex-1">
         {/* Header */}
-        <header className="bg-white border-b px-8 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-3">
-             <button onClick={() => router.back()} className="text-slate-400 hover:text-slate-600"><ArrowLeft size={20}/></button>
-             <AssetBreadcrumb 
-               items={[
-                 { label: "หน้าหลัก", href: "/" },
-                 { label: "รายการคำร้อง", href: "/requests/list-requests" },
-                 { label: "รายละเอียดคำร้อง #REF-2024-089" }
-               ]} 
-             />
-          </div>
+        {/* <header className="bg-white border-b px-8 py-4 flex justify-between items-center">
+          
           <div className="flex items-center space-x-4">
              <div className="text-right mr-3">
                 <p className="text-xs font-black text-slate-800 leading-none">Admin Somsak</p>
@@ -113,62 +104,72 @@ const AdminRequestDetail = () => {
              </div>
              <div className="w-10 h-10 bg-slate-800 rounded-xl"></div>
           </div>
-        </header>
+        </header> */}
 
-        <main className="p-10 max-w-7xl mx-auto grid grid-cols-12 gap-8">
-          {/* Left Content */}
-          <div className="col-span-8 space-y-8">
-            <div>
-              <div className="flex items-center space-x-3 mb-4">
-                <span className="bg-blue-50 text-blue-500 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">{status}</span>
-                <span className="text-slate-400 font-bold text-sm">REF-2024-089</span>
-              </div>
-              <h1 className="text-3xl font-black text-slate-800 leading-tight mb-4">พบปัญหาท่อน้ำแตกบริเวณชั้น 2 อาคารบรรณสาร (Library)</h1>
-              <p className="text-slate-500 text-lg leading-relaxed">มีน้ำรั่วซึมไหลออกมาจากเพดานบริเวณโซนที่นั่งอ่านหนังสือเงียบ ชั้น 3 ใกล้กับจุดปลั๊กไฟ รบกวนรีบดำเนินการตรวจสอบก่อนที่จะส่งผลเสียต่อสินทรัพย์และหนังสือจะเสียหาย</p>
-            </div>
-
-            <div className="grid grid-cols-3 gap-6">
-              <InfoSmall icon={<MapPin className="text-orange-500"/>} label="สถานที่" value="อาคารบรรณสาร (ชั้น 3)"/>
-              <InfoSmall icon={<Calendar className="text-orange-500"/>} label="วันที่แจ้ง" value="24 Oct 2024, 14:30"/>
-              <InfoSmall icon={<FileText className="text-orange-500"/>} label="ประเภท" value="แจ้งซ่อมบำรุง"/>
-            </div>
-
-            <div>
-              <h4 className="font-black text-slate-800 mb-4 flex items-center"><Paperclip size={18} className="mr-2"/> ไฟล์แนบและหลักฐาน</h4>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="h-48 bg-slate-200 rounded-3xl overflow-hidden border-2 border-white shadow-sm">
-                   <img src="/api/placeholder/400/200" alt="evidence-1" className="w-full h-full object-cover"/>
+        <main className="flex-1 p-8 overflow-y-auto">
+        <div className='mb-4'>
+          <AssetBreadcrumb
+            items={[
+              { label: "หน้าหลัก", href: "/" },
+              { label: "รายการคำร้อง", href: "/requests/list-requests" },
+              { label: "รายละเอียดคำร้อง #REF-2024-089" }
+            ]}
+          />
+        </div>
+          <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
+            {/* Left Content */}
+            <div className="col-span-8 space-y-8">
+              <div>
+                <div className="flex items-center space-x-3 mb-4">
+                  <span className="bg-blue-50 text-blue-500 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">{status}</span>
+                  <span className="text-slate-400 font-bold text-sm">REF-2024-089</span>
                 </div>
-                <div className="h-48 bg-slate-200 rounded-3xl overflow-hidden border-2 border-white shadow-sm">
-                   <img src="/api/placeholder/400/200" alt="evidence-2" className="w-full h-full object-cover"/>
+                <h1 className="text-3xl font-black text-slate-800 leading-tight mb-4">พบปัญหาท่อน้ำแตกบริเวณชั้น 2 อาคารบรรณสาร (Library)</h1>
+                <p className="text-slate-500 text-lg leading-relaxed">มีน้ำรั่วซึมไหลออกมาจากเพดานบริเวณโซนที่นั่งอ่านหนังสือเงียบ ชั้น 3 ใกล้กับจุดปลั๊กไฟ รบกวนรีบดำเนินการตรวจสอบก่อนที่จะส่งผลเสียต่อสินทรัพย์และหนังสือจะเสียหาย</p>
+              </div>
+
+              <div className="grid grid-cols-3 gap-6">
+                <InfoSmall icon={<MapPin className="text-orange-500" />} label="สถานที่" value="อาคารบรรณสาร (ชั้น 3)" />
+                <InfoSmall icon={<Calendar className="text-orange-500" />} label="วันที่แจ้ง" value="24 Oct 2024, 14:30" />
+                <InfoSmall icon={<FileText className="text-orange-500" />} label="ประเภท" value="แจ้งซ่อมบำรุง" />
+              </div>
+
+              <div>
+                <h4 className="font-black text-slate-800 mb-4 flex items-center"><Paperclip size={18} className="mr-2" /> ไฟล์แนบและหลักฐาน</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="h-48 bg-slate-200 rounded-3xl overflow-hidden border-2 border-white shadow-sm">
+                    <img src="/api/placeholder/400/200" alt="evidence-1" className="w-full h-full object-cover" />
+                  </div>
+                  <div className="h-48 bg-slate-200 rounded-3xl overflow-hidden border-2 border-white shadow-sm">
+                    <img src="/api/placeholder/400/200" alt="evidence-2" className="w-full h-full object-cover" />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="space-y-6">
-               <h4 className="font-black text-slate-800 flex items-center tracking-tight"><FileText size={18} className="mr-2"/> ประวัติการสนทนา</h4>
-               <div className="space-y-4">
+              <div className="space-y-6">
+                <h4 className="font-black text-slate-800 flex items-center tracking-tight"><FileText size={18} className="mr-2" /> ประวัติการสนทนา</h4>
+                <div className="space-y-4">
                   <ChatBubble name="NALINEE J." time="14:35" text="แจ้งเพิ่มเติมค่ะ ตรงบริเวณที่แตกมีปลั๊กไฟอยู่ใกล้ๆ ด้วยค่ะ" />
                   <ChatBubble name="ADMIN SOMSAK" time="14:40" text="รับทราบครับ กำลังประสานงานช่างอาคารที่ดูแลโซนบรรณสารให้รีบเข้าไปตรวจสอบด่วนครับ" isAdmin />
-               </div>
-               <div className="flex items-center space-x-3 bg-slate-100 p-3 rounded-2xl">
+                </div>
+                <div className="flex items-center space-x-3 bg-slate-100 p-3 rounded-2xl">
                   <input type="text" placeholder="พิมพ์ข้อความตอบกลับผู้แจ้ง..." className="bg-transparent flex-1 text-sm outline-none px-2" />
                   <Paperclip size={18} className="text-slate-400 cursor-pointer" />
-                  <button className="bg-orange-500 text-white p-2 rounded-xl"><Send size={16}/></button>
-               </div>
+                  <button className="bg-orange-500 text-white p-2 rounded-xl"><Send size={16} /></button>
+                </div>
+              </div>
             </div>
-          </div>
 
-          {/* Right Sidebar: Status Update */}
-          <div className="col-span-4 space-y-8">
-            <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100">
-               <h4 className="font-black text-slate-800 mb-6">การจัดการคำร้อง</h4>
-               <div className="space-y-6">
+            {/* Right Sidebar: Status Update */}
+            <div className="col-span-4 space-y-8">
+              <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100">
+                <h4 className="font-black text-slate-800 mb-6">การจัดการคำร้อง</h4>
+                <div className="space-y-6">
                   <div>
                     <label className="text-[10px] font-black text-slate-300 uppercase tracking-widest block mb-2">เปลี่ยนสถานะ</label>
                     <div className="relative">
-                      <select 
-                        value={status} 
+                      <select
+                        value={status}
                         onChange={(e) => setStatus(e.target.value)}
                         className="w-full bg-slate-50 border-none rounded-xl py-3 px-4 appearance-none text-sm font-bold text-slate-700 outline-none cursor-pointer"
                       >
@@ -191,7 +192,7 @@ const AdminRequestDetail = () => {
                     </div>
                   </div>
 
-                  <button 
+                  <button
                     onClick={handleSaveClick}
                     className="w-full bg-[#E9652B] text-white py-4 rounded-2xl font-black shadow-lg shadow-orange-100 hover:bg-orange-600 transition-all active:scale-[0.98]"
                   >
@@ -200,15 +201,16 @@ const AdminRequestDetail = () => {
                   <button className="w-full text-orange-500 text-xs font-bold py-2 hover:underline flex items-center justify-center">
                     <Download size={14} className="mr-2" /> ดาวน์โหลด PDF สรุปคำร้อง
                   </button>
-               </div>
-            </div>
+                </div>
+              </div>
 
-            <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100">
-               <h4 className="font-black text-slate-800 mb-6 uppercase tracking-tight text-sm">Activity Log</h4>
-               <div className="space-y-6">
+              <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100">
+                <h4 className="font-black text-slate-800 mb-6 uppercase tracking-tight text-sm">Activity Log</h4>
+                <div className="space-y-6">
                   <LogItem user="Admin Somsak" action="มอบหมายงานให้ นายวัชรินทร์ แสนอ่อน" time="15 MINS AGO" />
                   <LogItem user="System Automatic" action="เปลี่ยนสถานะเป็น In Progress" time="18 MINS AGO" />
-               </div>
+                </div>
+              </div>
             </div>
           </div>
         </main>
@@ -254,11 +256,10 @@ const LogItem = ({ user, action, time }: any) => (
 
 const SidebarNavItem = ({ label, icon, active }: { label: string; icon: React.ReactNode; active?: boolean }) => (
   <div
-    className={`flex items-center px-4 py-3 rounded-xl font-bold text-sm cursor-pointer transition-all ${
-      active
+    className={`flex items-center px-4 py-3 rounded-xl font-bold text-sm cursor-pointer transition-all ${active
         ? 'bg-orange-50 text-orange-600'
         : 'text-slate-400 hover:bg-slate-50 hover:text-orange-600'
-    }`}
+      }`}
   >
     <span className="mr-3">{icon}</span>
     {label}

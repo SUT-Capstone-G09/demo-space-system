@@ -32,12 +32,12 @@ const AdminRequestTable = () => {
         </nav>
       </aside>
 
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-8 overflow-y-auto">
         <div className="mb-4">
           <AssetBreadcrumb 
             items={[
               { label: "หน้าหลัก", href: "/" },
-              { label: "ระบบจัดการคำร้อง", href: "/requests" },
+              { label: "ระบบจัดการคำร้อง", href: "/requests/dashboard" },
               { label: "รายการคำร้อง" }
             ]} 
           />

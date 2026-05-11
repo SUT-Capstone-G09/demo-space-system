@@ -24,7 +24,7 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-[#F8F9FB] font-sans">
+    <div className="flex min-h-screen bg-gray-50 font-sans">
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r flex flex-col sticky top-0 h-screen">
         <div className="p-6">
@@ -51,8 +51,7 @@ const AdminDashboard = () => {
           <AssetBreadcrumb
             items={[
               { label: "หน้าหลัก", href: "/" },
-              { label: "ระบบจัดการคำร้อง", href: "/requests" },
-              { label: "แดชบอร์ด" }
+              { label: "ระบบจัดการคำร้อง"},
             ]}
           />
           <div className="flex items-center space-x-6">
