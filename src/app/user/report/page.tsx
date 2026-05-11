@@ -1,7 +1,7 @@
-export default function ProfilePage() {
+export default function ReportPage() {
     return (
         <div className="flex justify-center min-h-screen">
-            <h1>Profile Page</h1>
+            <h1>Report Page</h1>
         </div>
     );
 }

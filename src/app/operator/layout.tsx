@@ -1,11 +1,12 @@
 // app/(operator)/layout.tsx
 "use client"
-import { useAuth } from "@/hooks/useAuth"
+import { useAuthContext } from "@/lib/context/auth-context"
 import { useRouter } from "next/navigation"
 import { useEffect, ReactNode } from "react"
+import OperatorSidebar from "@/components/layout/sidebar/operatorSidebar"
 
 export default function OperatorLayout({ children }: { children: ReactNode }) {
-  const { user, isAuthenticated } = useAuth()
+  const { user, isAuthenticated } = useAuthContext()
   const router = useRouter()
 
   useEffect(() => {
@@ -20,5 +21,12 @@ export default function OperatorLayout({ children }: { children: ReactNode }) {
 
   if (!isAuthenticated || user?.role !== "operator") return null
 
-  return <>{children}</>
+  return (
+    <>
+      <OperatorSidebar />
+      <main className="ml-64 pt-20 min-h-screen">
+        {children}
+      </main>
+    </>
+  )
 }
