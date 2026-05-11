@@ -10,8 +10,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, User, LogOut } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { 
+  ChevronDown, 
+  User, 
+  LogOut, 
+  Settings, 
+  AlertCircle 
+} from "lucide-react";
 import { useAuthContext } from "@/lib/context/auth-context";
 import { LoginModal } from "@/app/login/page";
 
@@ -19,6 +24,7 @@ export default function Navbar() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const { user, logout, isAuthenticated } = useAuthContext();
 
+  // เมนูนำทางหลัก
   const navItems = [
     { label: "เกี่ยวกับเรา", href: "/about" },
     {
@@ -35,10 +41,33 @@ export default function Navbar() {
     { label: "ติดต่อเรา", href: "/report" },
   ];
 
+  // เมนูสำหรับผู้ใช้งานที่ Login แล้ว (แยกตาม Role)
+  const userMenuItems = user ? [
+    {
+      label: "จัดการระบบ",
+      href: "/admin/dashboard",
+      icon: Settings,
+      show: user.role === "admin",
+    },
+    {
+      label: "โปรไฟล์",
+      href: user.role === "operator" ? "/operator/profile" : "/user/profile",
+      icon: User,
+      show: user.role !== "admin",
+    },
+    {
+      label: "แจ้งปัญหา",
+      href: user.role === "operator" ? "/operator/report" : "/user/report",
+      icon: AlertCircle,
+      show: user.role !== "admin",
+    },
+  ].filter(item => item.show) : [];
+
   return (
     <>
       <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-[99] border-b border-slate-100 shadow-sm">
         <div className="max-w px-6 mx-auto h-20 flex items-center justify-between">
+          
           {/* Logo Section */}
           <Link href="/" className="flex items-center gap-3 group transition-all">
             <div className="overflow-hidden transform group-hover:scale-105 transition-transform">
@@ -51,15 +80,14 @@ export default function Navbar() {
                 priority
               />
             </div>
-
             <div className="flex flex-col">
-              <span className="font-bold text-brand-primary tracking-tighter text-xl leading-none">
+              <span className="font-bold text-brand-primary tracking-tighter text-xl leading-none font-sut">
                 ASSET
               </span>
             </div>
           </Link>
 
-          {/* Navigation Links (Desktop) */}
+          {/* Navigation Links */}
           <div className="flex items-center gap-10">
             <div className="hidden md:flex items-center gap-6">
               {navItems.map((item) => (
@@ -96,38 +124,46 @@ export default function Navbar() {
               ))}
             </div>
 
+            {/* Auth Section */}
             <div className="flex items-center gap-4">
               {isAuthenticated && user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <button className="flex items-center justify-center w-10 h-10 rounded-full bg-brand-primary/10 hover:bg-brand-primary/20 transition-colors cursor-pointer">
+                    <button className="flex items-center justify-center w-10 h-10 rounded-full bg-brand-primary/10 hover:bg-brand-primary/20 transition-colors cursor-pointer outline-none">
                       <User className="w-5 h-5 text-brand-primary" />
                     </button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48 p-2 z-[100]">
-                    <DropdownMenuItem disabled className="p-3 cursor-default">
-                      <span className="text-sm font-medium text-brand-secondary">
-                        {user.name}
-                      </span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link
-                        href={user.role === "operator" ? "/operator/profile" : "/user/profile"}
-                        className="w-full cursor-pointer p-3 focus:text-brand-primary flex items-center gap-2"
-                      >
-                        <User className="w-4 h-4" />
-                        <span className="text-sm">โปรไฟล์</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <button
+                  
+                  <DropdownMenuContent align="end" className="w-52 p-2 z-[100]">
+                    {/* User Header */}
+                    <div className="px-3 py-2 mb-1 border-b border-slate-50">
+                      <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">บัญชีผู้ใช้งาน</p>
+                      <p className="text-sm font-bold text-brand-secondary truncate">{user.name}</p>
+                    </div>
+
+                    {/* Dynamic Role Items */}
+                    {userMenuItems.map((item) => (
+                      <DropdownMenuItem key={item.href} asChild>
+                        <Link
+                          href={item.href}
+                          className="w-full cursor-pointer p-3 focus:text-brand-primary flex items-center gap-3 transition-colors"
+                        >
+                          <item.icon className="w-4 h-4 text-gray-400 group-hover:text-brand-primary" />
+                          <span className="text-sm font-medium">{item.label}</span>
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+
+                    {/* Logout Button */}
+                    <div className="mt-1 pt-1 border-t border-slate-50">
+                      <DropdownMenuItem 
+                        className="w-full cursor-pointer p-3 focus:bg-red-50 focus:text-red-600 text-red-500 flex items-center gap-3 transition-colors"
                         onClick={() => logout()}
-                        className="w-full cursor-pointer p-3 focus:text-brand-primary flex items-center gap-2 text-red-600 hover:text-red-700"
                       >
                         <LogOut className="w-4 h-4" />
-                        <span className="text-sm">ออกจากระบบ</span>
-                      </button>
-                    </DropdownMenuItem>
+                        <span className="text-sm font-medium">ออกจากระบบ</span>
+                      </DropdownMenuItem>
+                    </div>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
