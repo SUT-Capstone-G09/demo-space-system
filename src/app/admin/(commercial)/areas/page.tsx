@@ -1,4 +1,3 @@
-import React from "react";
 import AdminAreaHeader from "@/features/areas/components/admin/AdminAreaHeader";
 import AdminAreaFilters from "@/features/areas/components/admin/AdminAreaFilters";
 import AdminAreaGrid from "@/features/areas/components/admin/AdminAreaGrid";

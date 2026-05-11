@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -21,8 +22,21 @@ import { useAuthContext } from "@/lib/context/auth-context";
 import { LoginModal } from "@/app/login/page";
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { user, logout, isAuthenticated } = useAuthContext();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // ไม่แสดง Navbar ในหน้าที่มี Sidebar
+  const isDashboardPage = pathname?.startsWith("/admin") || 
+                          pathname?.startsWith("/operator") || 
+                          pathname?.startsWith("/user");
+
+  if (!mounted || isDashboardPage) return null;
 
   // เมนูนำทางหลัก
   const navItems = [
@@ -76,7 +90,8 @@ export default function Navbar() {
                 alt="SUT Logo"
                 width={48}
                 height={48}
-                className="object-contain"
+                className="object-contain h-auto"
+                style={{ height: 'auto' }}
                 priority
               />
             </div>
