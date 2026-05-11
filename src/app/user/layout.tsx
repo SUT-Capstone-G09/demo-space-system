@@ -1,11 +1,12 @@
 // app/(user)/layout.tsx
 "use client"
-import { useAuth } from "@/hooks/useAuth"
+import { useAuthContext } from "@/lib/context/auth-context"
 import { useRouter } from "next/navigation"
 import { useEffect, ReactNode } from "react"
+import UserSidebar from "@/components/layout/sidebar/userSidebar"
 
 export default function UserLayout({ children }: { children: ReactNode }) {
-  const { user, isAuthenticated } = useAuth()
+  const { user, isAuthenticated } = useAuthContext()
   const router = useRouter()
 
   useEffect(() => {
@@ -20,5 +21,12 @@ export default function UserLayout({ children }: { children: ReactNode }) {
 
   if (!isAuthenticated || user?.role !== "user") return null
 
-  return <>{children}</>
+  return (
+    <>
+      <UserSidebar />
+      <main className="md:ml-64 pt-20 min-h-[calc(100vh-80px)]">
+        {children}
+      </main>
+    </>
+  )
 }

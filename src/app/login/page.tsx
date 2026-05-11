@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
     Dialog,
@@ -13,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { login } from "@/lib/services/auth.service";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthContext } from "@/lib/context/auth-context";
 
 interface LoginModalProps {
     isOpen: boolean;
@@ -21,8 +20,7 @@ interface LoginModalProps {
 }
 
 export function LoginModal({ isOpen, onOpenChange }: LoginModalProps) {
-    const router = useRouter();
-    const { login: saveAuth } = useAuth();
+    const { login: saveAuth } = useAuthContext();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -37,13 +35,6 @@ export function LoginModal({ isOpen, onOpenChange }: LoginModalProps) {
             const result = await login(email, password);
             saveAuth(result.token, result.user);
             onOpenChange(false);
-            if (result.user.role === "operator") {
-                router.push("/operator/profile")
-            } else if (result.user.role === "user") {
-                router.push("/user/profile")
-            } else {
-                router.push("/dashboard")
-            };
         } catch (err) {
             setError(err instanceof Error ? err.message : "เกิดข้อผิดพลาด");
         } finally {
