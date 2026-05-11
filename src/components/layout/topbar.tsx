@@ -10,14 +10,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, User, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthContext } from "@/lib/context/auth-context";
 import { LoginModal } from "@/app/login/page";
 
 export default function Navbar() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, logout, isAuthenticated } = useAuthContext();
 
   const navItems = [
     { label: "เกี่ยวกับเรา", href: "/about" },
@@ -98,17 +98,38 @@ export default function Navbar() {
 
             <div className="flex items-center gap-4">
               {isAuthenticated && user ? (
-                <>
-                  <span className="text-sm font-medium text-brand-secondary">
-                    {user.name}
-                  </span>
-                  <Button
-                    onClick={() => logout()}
-                    className="px-8 font-bold bg-red-600 hover:bg-red-700 text-white"
-                  >
-                    Logout
-                  </Button>
-                </>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex items-center justify-center w-10 h-10 rounded-full bg-brand-primary/10 hover:bg-brand-primary/20 transition-colors cursor-pointer">
+                      <User className="w-5 h-5 text-brand-primary" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48 p-2 z-[100]">
+                    <DropdownMenuItem disabled className="p-3 cursor-default">
+                      <span className="text-sm font-medium text-brand-secondary">
+                        {user.name}
+                      </span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href={user.role === "operator" ? "/operator/profile" : "/user/profile"}
+                        className="w-full cursor-pointer p-3 focus:text-brand-primary flex items-center gap-2"
+                      >
+                        <User className="w-4 h-4" />
+                        <span className="text-sm">โปรไฟล์</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <button
+                        onClick={() => logout()}
+                        className="w-full cursor-pointer p-3 focus:text-brand-primary flex items-center gap-2 text-red-600 hover:text-red-700"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span className="text-sm">ออกจากระบบ</span>
+                      </button>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ) : (
                 <Button
                   onClick={() => setIsLoginOpen(true)}
