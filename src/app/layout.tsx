@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Geist_Mono, Noto_Sans_Thai } from "next/font/google";
 import "./globals.css";
 import "leaflet/dist/leaflet.css";
 import { cn } from "@/lib/utils";
 import { AuthProvider } from "@/lib/context/auth-context";
 import Navbar from "@/components/layout/topbar";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const notoSansThai = Noto_Sans_Thai({
+  variable: "--font-noto-sans-thai",
+  subsets: ["latin", "thai"],
 });
 
 const geistMono = Geist_Mono({
@@ -30,8 +28,14 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
+      lang="th"
+      className={cn(
+        "h-full",
+        "antialiased",
+        notoSansThai.variable,
+        geistMono.variable,
+        "font-sans"
+      )}
     >
       <body className="min-h-full flex flex-col">
         <AuthProvider>
