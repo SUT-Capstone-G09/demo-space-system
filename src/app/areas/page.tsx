@@ -1,11 +1,11 @@
 "use client"
 
 import { mockLocations } from '@/features/areas/data/locations';
-import AreasBanner from "@/features/areas/components/AreasBanner";
-import AreasAbout from "@/features/areas/components/AreasAbout";
-import AreasList from "@/features/areas/components/AreasList";
-import AreasMapSection from "@/features/areas/components/AreasMapSection";
-import AreasFooterInfo from "@/features/areas/components/AreasFooterInfo";
+import AreasBanner from "@/features/areas/components/public/AreasBanner";
+import AreasAbout from "@/features/areas/components/public/AreasAbout";
+import AreasList from "@/features/areas/components/public/AreasList";
+import AreasMapSection from "@/features/areas/components/public/AreasMapSection";
+import AreasFooterInfo from "@/features/areas/components/public/AreasFooterInfo";
 import PageContainer from "@/components/layout/PageContainer";
 
 export default function AreasPage() {

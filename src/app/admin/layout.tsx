@@ -2,22 +2,31 @@
 "use client"
 import { useAuthContext } from "@/lib/context/auth-context"
 import { useRouter } from "next/navigation"
-import { useEffect, ReactNode } from "react"
+import { useEffect, useState, ReactNode } from "react"
 import AdminSidebar from "@/components/layout/sidebar/adminSidebar"
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const { user, isAuthenticated } = useAuthContext()
   const router = useRouter()
+  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      router.push("/login")        // ยังไม่ได้ login
-      return
+    setIsMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (isMounted) {
+      if (!isAuthenticated) {
+        router.push("/login")       
+        return
+      }
+      if (user?.role !== "admin") {
+        router.push("/unauthorized")
+      }
     }
-    if (user?.role !== "admin") {
-      router.push("/unauthorized") // login แล้วแต่ role ผิด
-    }
-  }, [isAuthenticated, user])
+  }, [isAuthenticated, user, isMounted, router])
+
+  if (!isMounted) return null
 
   if (!isAuthenticated || user?.role !== "admin") return null
 

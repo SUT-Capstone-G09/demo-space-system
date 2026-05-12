@@ -7,13 +7,15 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
-import { 
+import {
   MapPin, Pencil, Banknote,
   Building2, Maximize2, FileText,
-  X, ExternalLink, Calendar
+  X, ExternalLink, Calendar, LayoutGrid
 } from "lucide-react";
 import { Location } from "@/features/areas/types/location";
 import { cn } from "@/lib/utils";
+import AdminAreaEditDrawer from "./AdminAreaEditDrawer";
+import React, { useState } from "react";
 
 interface Props {
   location: Location | null;
@@ -22,6 +24,7 @@ interface Props {
 }
 
 export default function AdminAreaDrawer({ location, open, onClose }: Props) {
+  const [isEditOpen, setIsEditOpen] = useState(false);
   if (!location) return null;
 
   const infoItems = [
@@ -52,30 +55,18 @@ export default function AdminAreaDrawer({ location, open, onClose }: Props) {
       <SheetContent
         side="right"
         showCloseButton={false}
-        className={cn(
-          "w-full max-w-[680px]",
-          "p-0 border-l border-slate-100",
-          "bg-white shadow-[−20px_0_60px_rgba(0,0,0,0.06)]",
-          "overflow-y-auto"
-        )}
+        className="w-full sm:max-w-[640px] p-0 border-none bg-white flex flex-col h-full shadow-2xl"
       >
         {/* Header */}
-        <SheetHeader 
-          className={cn(
-            "px-5 pt-6 pb-4",
-            "sticky top-0 bg-white/90 backdrop-blur-md z-20",
-            "border-b border-slate-100",
-            "flex flex-row items-center justify-between space-y-0"
-          )}
-        >
-            <div className="space-y-1">
-            <SheetTitle className="text-base font-bold text-slate-900 tracking-tight text-left">
+        <SheetHeader className="px-6 py-5 border-b border-slate-100 flex flex-row items-center justify-between space-y-0 shrink-0 bg-white">
+          <div className="space-y-1">
+            <SheetTitle className="text-lg font-bold text-slate-900 tracking-tight text-left">
               {location.name}
             </SheetTitle>
 
             <SheetDescription asChild>
               <div className="flex items-center gap-1.5 text-left">
-                <div className="flex items-center gap-1 px-2 py-0.5 bg-[#f26522]/8 rounded">
+                <div className="flex items-center gap-1 px-2 py-0.5 bg-[#f26522]/10 rounded-[7px]">
                   <MapPin size={10} className="text-[#f26522]" strokeWidth={2.5} />
                   <span className="text-[9px] font-semibold tracking-wide text-[#f26522]">
                     {location.category}
@@ -87,107 +78,73 @@ export default function AdminAreaDrawer({ location, open, onClose }: Props) {
             </SheetDescription>
           </div>
 
-          <button 
+          <button
             onClick={onClose}
-            className={cn(
-              "size-8 rounded-xl",
-              "bg-slate-50 text-slate-400",
-              "hover:bg-slate-100 hover:text-slate-700",
-              "transition-all flex items-center justify-center"
-            )}
+            className="size-9 rounded-[7px] bg-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-900 transition-all flex items-center justify-center group"
           >
-            <X size={15} />
+            <X size={18} className="transition-transform group-hover:rotate-90" />
           </button>
         </SheetHeader>
 
-        <div className="px-5 py-5 space-y-6">
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8">
 
-          {/* Image */}
-          <div className="space-y-2">
-            <div className="relative rounded-xl overflow-hidden h-48 w-full bg-slate-100">
+          {/* Image Section */}
+          <div className="space-y-3">
+            <div className="relative rounded-[7px] overflow-hidden h-56 w-full bg-slate-100 group">
               <img
                 src={location.image}
                 alt={location.name}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-              
-              <button className={cn(
-                "absolute bottom-3 right-3",
-                "size-8 rounded-lg",
-                "bg-black/20 backdrop-blur-sm text-white",
-                "hover:bg-white hover:text-slate-900 transition-all",
-                "flex items-center justify-center"
-              )}>
-                <ExternalLink size={14} />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+
+              <button className="absolute bottom-3 right-3 size-9 rounded-[7px] bg-white/20 backdrop-blur-md text-white hover:bg-white hover:text-slate-900 transition-all flex items-center justify-center">
+                <ExternalLink size={16} />
               </button>
             </div>
 
             <div className="grid grid-cols-4 gap-2">
               {[1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className={cn(
-                    "aspect-square rounded-lg overflow-hidden bg-slate-100",
-                    "border border-transparent hover:border-[#f26522]",
-                    "transition-all cursor-pointer"
-                  )}
-                >
-                  <img
-                    src={location.image}
-                    className="w-full h-full object-cover opacity-70 hover:opacity-100 transition-opacity"
-                  />
+                <div key={i} className="aspect-square rounded-[7px] overflow-hidden bg-slate-100 border border-transparent hover:border-[#f26522] transition-all cursor-pointer">
+                  <img src={location.image} className="w-full h-full object-cover opacity-70 hover:opacity-100 transition-opacity" />
                 </div>
               ))}
-              <div className={cn(
-                "aspect-square rounded-lg",
-                "bg-slate-50 border border-dashed border-slate-200",
-                "flex items-center justify-center",
-                "text-slate-400 font-semibold text-xs",
-                "hover:bg-slate-100 transition-colors cursor-pointer"
-              )}>
+              <div className="aspect-square rounded-[7px] bg-slate-50 border border-dashed border-slate-200 flex items-center justify-center text-slate-400 font-bold text-xs hover:bg-slate-100 transition-colors cursor-pointer">
                 +4
               </div>
             </div>
           </div>
 
-          {/* Highlights */}
-          <div className="grid grid-cols-2 gap-3">
-            <HighlightCard 
-              icon={Banknote} 
-              label="ราคาเช่า" 
-              value={location.price ? `${location.price.toLocaleString()} ฿` : "N/A"} 
+          {/* Highlights Grid */}
+          <div className="grid grid-cols-2 gap-4">
+            <HighlightCard
+              icon={Banknote}
+              label="ราคาเช่า"
+              value={location.price ? `${location.price.toLocaleString()} ฿` : "N/A"}
               subValue="ต่อเดือน"
               theme="emerald"
             />
-            <HighlightCard 
-              icon={Calendar} 
-              label="สิ้นสุดสัญญา" 
-              value={location.contractEndDate || "ไม่มีสัญญา"} 
+            <HighlightCard
+              icon={Calendar}
+              label="สิ้นสุดสัญญา"
+              value={location.contractEndDate || "ไม่มีสัญญา"}
               subValue="วันหมดอายุ"
               theme="amber"
             />
           </div>
 
-          {/* Info */}
-          <div className="space-y-2">
+          {/* Info Items List */}
+          <div className="space-y-3">
             {infoItems.map((item) => (
-              <div
-                key={item.label}
-                className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-xl",
-                  "bg-slate-50 hover:bg-white border border-transparent",
-                  "hover:border-slate-100 hover:shadow-sm transition-all"
-                )}
-              >
-                <div className="size-8 rounded-lg bg-white shadow-sm flex items-center justify-center shrink-0">
-                  <item.icon size={15} className="text-[#f26522]" strokeWidth={2} />
+              <div key={item.label} className="flex items-center gap-4 px-5 py-4 rounded-[7px] bg-slate-50/50 border border-slate-100 hover:bg-white hover:border-slate-200 hover:shadow-sm transition-all group">
+                <div className="size-10 rounded-[7px] bg-white shadow-sm border border-slate-100 flex items-center justify-center shrink-0 group-hover:border-[#f26522]/20 group-hover:bg-[#f26522]/5 transition-colors">
+                  <item.icon size={18} className="text-[#6d6e70] group-hover:text-[#f26522] transition-colors" strokeWidth={2} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[9px] font-medium text-slate-400 mb-0.5 tracking-wide">
+                  <p className="text-[10px] font-bold text-slate-400 mb-0.5 uppercase tracking-widest">
                     {item.label}
                   </p>
-                  <p className="text-sm font-semibold text-slate-800 truncate">
+                  <p className="text-[13px] font-bold text-slate-700 truncate">
                     {item.value}
                   </p>
                 </div>
@@ -196,20 +153,38 @@ export default function AdminAreaDrawer({ location, open, onClose }: Props) {
           </div>
 
           {/* Admin Actions */}
-          <div className="grid grid-cols-2 gap-3 pt-2 pb-6">
-            <AdminActionButton
-              label="แก้ไขข้อมูล"
-              icon={Pencil}
-              variant="secondary"
-            />
-            <AdminActionButton
-              label="จัดการสัญญา"
-              icon={FileText}
-              variant="primary"
-            />
+          <div className="space-y-3 pt-4 pb-4">
+            {location.category === "โรงอาหาร" && (
+              <AdminActionButton
+                label="แก้ไขแปลนผัง (Floor Plan)"
+                icon={LayoutGrid}
+                variant="primary"
+                className="w-full"
+              />
+            )}
+
+            <div className="grid grid-cols-2 gap-3">
+              <AdminActionButton
+                label="แก้ไขข้อมูล"
+                icon={Pencil}
+                variant="secondary"
+                onClick={() => setIsEditOpen(true)}
+              />
+              <AdminActionButton
+                label="จัดการสัญญา"
+                icon={FileText}
+                variant="secondary"
+              />
+            </div>
           </div>
         </div>
       </SheetContent>
+
+      <AdminAreaEditDrawer 
+        location={location}
+        open={isEditOpen}
+        onClose={() => setIsEditOpen(false)}
+      />
     </Sheet>
   );
 }
@@ -221,8 +196,8 @@ function HighlightCard({ icon: Icon, label, value, subValue, theme }: any) {
   };
 
   return (
-    <div className={cn("p-5 rounded-[28px] border transition-all hover:scale-[1.02]", themes[theme as keyof typeof themes])}>
-      <div className="flex items-center gap-2 mb-3 opacity-80">
+    <div className={cn("p-5 rounded-[7px] border transition-all hover:scale-[1.02]", themes[theme as keyof typeof themes])}>
+      <div className="flex items-center gap-2 mb-3 opacity-70">
         <Icon size={16} strokeWidth={3} />
         <span className="text-[10px] font-black uppercase tracking-widest">{label}</span>
       </div>
@@ -234,35 +209,19 @@ function HighlightCard({ icon: Icon, label, value, subValue, theme }: any) {
   );
 }
 
-function AdminActionButton({ label, icon: Icon, variant }: any) {
+function AdminActionButton({ label, icon: Icon, variant, className, onClick }: any) {
   return (
     <button
+      onClick={onClick}
       className={cn(
-        `
-        h-12 px-4
-        inline-flex items-center gap-3
-        rounded-xl
-        border
-        transition-colors
-        text-sm font-medium
-        `,
+        "h-12 px-4 inline-flex items-center justify-center gap-3 rounded-[7px] border transition-all text-[13px] font-bold active:scale-[0.98]",
         variant === "primary"
-          ? `
-            bg-[#f26522]
-            border-[#f26522]
-            text-white
-            hover:bg-[#dd5b1c]
-          `
-          : `
-            bg-white
-            border-gray-200
-            text-gray-700
-            hover:bg-gray-50
-          `
+          ? "bg-[#f26522] border-[#f26522] text-white shadow-lg shadow-[#f26522]/20 hover:bg-[#d8561d]"
+          : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50",
+        className
       )}
     >
-      <Icon size={16} strokeWidth={2.2} />
-
+      <Icon size={16} strokeWidth={2.5} />
       <span>{label}</span>
     </button>
   );
