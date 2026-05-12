@@ -6,6 +6,7 @@ export interface Location {
   address: string;
   image: string;
   category: string;
+  building?: string;
   
   // เพิ่มฟิลด์สำหรับ Admin & Management
   status?: "active" | "vacant" | "inactive";
