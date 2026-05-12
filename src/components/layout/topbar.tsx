@@ -18,6 +18,7 @@ import {
   Settings, 
   AlertCircle 
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { useAuthContext } from "@/lib/context/auth-context";
 import { LoginModal } from "@/app/login/page";
 
@@ -79,25 +80,29 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-[1001] border-b border-slate-100 shadow-sm">
+      <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-[1001] border-b border-slate-100 shadow-sm overflow-hidden no-scrollbar">
         <div className="max-w px-6 mx-auto h-20 flex items-center justify-between">
           
           {/* Logo Section */}
           <Link href="/" className="flex items-center gap-3 group transition-all">
             <div className="overflow-hidden transform group-hover:scale-105 transition-transform">
               <Image
-                src="/SUT_logo.png"
+                src="/SUT_logo_orange.png"
                 alt="SUT Logo"
-                width={48}
-                height={48}
-                className="object-contain h-auto"
-                style={{ width: 'auto', height: 'auto' }}
+                width={0}
+                height={0}
+                sizes="100vw"
+                className="object-contain"
+                style={{ width: 'auto', height: '40px' }}
                 priority
               />
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-brand-primary tracking-tighter text-xl leading-none font-sut">
+              <span className="font-bold text-brand-primary tracking-tight text-2xl leading-none font-sut">
                 ASSET
+              </span>
+              <span className="text-[9px] font-medium text-brand-secondary tracking-[0.25em] uppercase leading-none mt-1 opacity-70">
+                Management
               </span>
             </div>
           </Link>
@@ -105,44 +110,74 @@ export default function Navbar() {
           {/* Navigation Links */}
           <div className="flex items-center gap-10">
             <div className="hidden md:flex items-center gap-6">
-              {navItems.map((item) => (
-                <div key={item.label} className="relative group">
-                  {item.subItems ? (
-                    <DropdownMenu>
-                      <DropdownMenuTrigger className="flex items-center gap-1 text-brand-secondary font-medium text-base hover:text-brand-primary transition-colors outline-none cursor-pointer">
+              {navItems.map((item) => {
+                const isItemActive = item.href === "/" 
+                  ? pathname === "/" 
+                  : pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href));
+                
+                const isSubItemActive = item.subItems?.some(sub => pathname === sub.href);
+                const active = isItemActive || isSubItemActive;
+
+                return (
+                  <div key={item.label} className="relative group">
+                    {item.subItems ? (
+                      <DropdownMenu modal={false}>
+                        <DropdownMenuTrigger 
+                          className={cn(
+                            "flex items-center gap-1 font-medium text-base transition-colors relative py-2 outline-none cursor-pointer",
+                            active ? "text-brand-primary" : "text-brand-secondary hover:text-brand-primary"
+                          )}
+                        >
+                          {item.label}
+                          <ChevronDown className="size-4 transition-transform group-data-[state=open]:rotate-180" />
+                          <span className={cn(
+                            "absolute bottom-0 left-0 h-0.5 bg-brand-primary transition-all",
+                            active ? "w-full" : "w-0 group-hover:w-full"
+                          )} />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start" className="w-56 p-2 z-[1100]">
+                          {item.subItems.map((subItem) => {
+                            const isSubActive = pathname === subItem.href;
+                            return (
+                              <DropdownMenuItem key={subItem.href} asChild>
+                                <Link
+                                  href={subItem.href}
+                                  className={cn(
+                                    "w-full cursor-pointer p-3 transition-colors",
+                                    isSubActive ? "text-brand-primary bg-brand-primary/5" : "focus:text-brand-primary"
+                                  )}
+                                >
+                                  <div className="text-sm font-medium">{subItem.label}</div>
+                                </Link>
+                              </DropdownMenuItem>
+                            );
+                          })}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        className={cn(
+                          "font-medium text-base transition-colors relative py-2 block",
+                          active ? "text-brand-primary" : "text-brand-secondary hover:text-brand-primary"
+                        )}
+                      >
                         {item.label}
-                        <ChevronDown className="size-4 transition-transform group-data-[state=open]:rotate-180" />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="start" className="w-56 p-2 z-[1100]">
-                        {item.subItems.map((subItem) => (
-                          <DropdownMenuItem key={subItem.href} asChild>
-                            <Link
-                              href={subItem.href}
-                              className="w-full cursor-pointer p-3 focus:text-brand-primary"
-                            >
-                              <div className="text-sm">{subItem.label}</div>
-                            </Link>
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  ) : (
-                    <Link
-                      href={item.href}
-                      className="text-brand-secondary font-medium text-base hover:text-brand-primary transition-colors relative py-2"
-                    >
-                      {item.label}
-                      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-primary transition-all group-hover:w-full" />
-                    </Link>
-                  )}
-                </div>
-              ))}
+                        <span className={cn(
+                          "absolute bottom-0 left-0 h-0.5 bg-brand-primary transition-all",
+                          active ? "w-full" : "w-0 group-hover:w-full"
+                        )} />
+                      </Link>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             {/* Auth Section */}
             <div className="flex items-center gap-4">
               {isAuthenticated && user ? (
-                <DropdownMenu>
+                <DropdownMenu modal={false}>
                   <DropdownMenuTrigger asChild>
                     <button className="flex items-center justify-center w-10 h-10 rounded-full bg-brand-primary/10 hover:bg-brand-primary/20 transition-colors cursor-pointer outline-none">
                       <User className="w-5 h-5 text-brand-primary" />
