@@ -1,6 +1,14 @@
 import { MapPin, ArrowRight, Store } from "lucide-react";
 import { Location } from "@/features/areas/types/location";
 import { cn } from "@/lib/utils";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 
 interface AdminAreaCardProps {
   location: Location;
@@ -17,22 +25,17 @@ const statusConfig: Record<
 > = {
   active: {
     label: "มีผู้เช่า",
-    color:
-      "bg-emerald-50/90 text-emerald-700 border-emerald-100",
+    color: "bg-emerald-50/90 text-emerald-700 border-emerald-100",
     dot: "bg-emerald-500",
   },
-
   vacant: {
     label: "ว่าง",
-    color:
-      "bg-amber-50/90 text-amber-700 border-amber-100",
+    color: "bg-amber-50/90 text-amber-700 border-amber-100",
     dot: "bg-amber-400",
   },
-
   inactive: {
     label: "ปิดใช้งาน",
-    color:
-      "bg-red-50/90 text-red-500 border-red-100",
+    color: "bg-red-50/90 text-red-500 border-red-100",
     dot: "bg-red-400",
   },
 };
@@ -41,102 +44,100 @@ export default function AdminAreaCard({
   location,
   onClick,
 }: AdminAreaCardProps) {
-  const status =
-    statusConfig[location.status ?? "active"];
-
-  const hasSubStalls =
-    (location.subStallCount ?? 0) > 0;
+  const status = statusConfig[location.status ?? "active"];
+  const hasSubStalls = (location.subStallCount ?? 0) > 0;
+  const isCanteen = location.category === "โรงอาหาร";
 
   return (
-    <div
+
+    <Card
       onClick={onClick}
       className={cn(
-        "group overflow-hidden rounded-[24px]",
-        "border border-slate-100 bg-white",
-        "shadow-sm transition-all duration-300",
-        "hover:-translate-y-1 hover:shadow-xl",
-        "cursor-pointer"
+        "group overflow-hidden",
+        "bg-white w-full max-w-[300px] mx-auto",
+        "transition-all duration-500 ease-out",
+        "hover:-translate-y-1.5 hover:shadow-[0_20px_40px_rgba(0,0,0,0.1)]",
+        "cursor-pointer flex flex-col gap-0 py-0 border-slate-200/60 rounded-[7px]"
       )}
     >
       {/* Image */}
-      <div className="relative h-40 w-full overflow-hidden bg-slate-100">
+      <div className="relative h-44 w-full overflow-hidden bg-slate-100 rounded-t-[7px]">
         <img
           src={location.image}
           alt={location.name}
           loading="lazy"
           className="
             h-full w-full object-cover
-            transition-transform duration-500
-            group-hover:scale-[1.03]
+            transition-transform duration-700
+            group-hover:scale-110
           "
         />
 
-        {/* Soft Gradient */}
-        <div
-          className="
-            absolute inset-0
-            bg-gradient-to-t
-            from-black/40 via-black/5 to-transparent
-          "
-        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/20" />
 
-        {/* Badges Container */}
-        <div className="absolute left-3.5 top-3.5 flex items-center gap-2">
-          {/* Category Overlay */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 bg-white/90 backdrop-blur-md rounded-lg border border-slate-200/50 shadow-sm">
+        {/* Top Badges */}
+        <div className="absolute inset-x-3 top-3 flex items-start justify-between gap-2">
+          {!isCanteen ? (
+            <div
+              className={cn(
+                "flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-sm shadow-sm ring-1 ring-black/5",
+                status.color.split(" ")[1]
+              )}
+            >
+              <div className={cn("size-1.5 rounded-full animate-pulse", status.dot)} />
+              <span className="text-[9px] font-black uppercase tracking-widest">
+                {status.label}
+              </span>
+            </div>
+          ) : (
+            <div />
+          )}
+
+          {/* Count Badge */}
+
+          {hasSubStalls && (
+            <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-black/40 backdrop-blur-md border border-white/20">
+              <Store size={10} className="text-[#f26522]" />
+              <span className="text-[9px] font-bold text-white">
+                {location.subStallCount}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Bottom Category */}
+        <div className="absolute bottom-3 left-3">
+          <div className="flex items-center gap-1.5 px-2 py-1 bg-white/10 backdrop-blur-md rounded-md border border-white/20">
             <MapPin size={10} className="text-[#f26522]" strokeWidth={2.5} />
-            <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wide">
+            <span className="text-[9px] font-bold text-white uppercase tracking-wider">
               {location.category}
             </span>
           </div>
         </div>
-
-        {/* Stall Count */}
-        {hasSubStalls && (
-          <div
-            className="
-              absolute right-3.5 top-3.5
-              flex items-center gap-1.5
-              rounded-lg bg-black/35
-              px-2.5 py-1
-              text-[10px] font-semibold text-white
-              backdrop-blur-sm
-            "
-          >
-            <Store
-              size={10}
-              className="text-[#f26522]"
-            />
-
-            {location.subStallCount} แผง
-          </div>
-        )}
       </div>
 
       {/* Content */}
-      <div className="space-y-4 p-5">
-        {/* Title */}
-        <div className="space-y-1.5">
-          <h3
-            className="
-              text-[16px] font-bold leading-snug
-              text-slate-900 line-clamp-1
-            "
-          >
-            {location.name}
-          </h3>
+      <CardHeader className="space-y-1.5 p-5 pb-0">
+        <CardTitle
+          className="
+            text-[16px] font-bold leading-snug
+            text-slate-900 line-clamp-1
+          "
+        >
+          {location.name}
+        </CardTitle>
 
-          <p
-            className="
-              text-[12px] leading-relaxed
-              text-slate-500 line-clamp-2
-            "
-          >
-            {location.address}
-          </p>
-        </div>
+        <CardDescription
+          className="
+            text-[12px] leading-relaxed
+            text-slate-500 line-clamp-2
+          "
+        >
+          {location.address}
+        </CardDescription>
+      </CardHeader>
 
-        {/* Dynamic Content */}
+      <CardContent className="p-5 py-4">
         {hasSubStalls ? (
           <SubStallPreview
             stallCount={location.subStallCount ?? 0}
@@ -147,12 +148,13 @@ export default function AdminAreaCard({
             contractEndDate={location.contractEndDate}
           />
         )}
+      </CardContent>
 
-        {/* Action */}
+      <CardFooter className="p-5 pt-0">
         <button
           className={cn(
             "flex w-full items-center justify-center gap-2",
-            "rounded-2xl bg-slate-50 py-3",
+            "rounded-[7px] bg-slate-50 py-3",
             "text-[12px] font-semibold text-slate-600",
             "transition-all duration-200",
             "hover:bg-[#f26522] hover:text-white",
@@ -169,8 +171,8 @@ export default function AdminAreaCard({
             "
           />
         </button>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 }
 
@@ -223,7 +225,7 @@ function StatItem({
   return (
     <div
       className={cn(
-        "rounded-2xl py-3 text-center",
+        "rounded-[7px] py-3 text-center",
         bg
       )}
     >
@@ -259,7 +261,7 @@ function SingleTenantInfo({
     <div className="grid grid-cols-2 gap-2.5">
       <div
         className="
-          rounded-2xl bg-slate-50
+          rounded-[7px] bg-slate-50
           px-4 py-3
         "
       >
@@ -284,7 +286,7 @@ function SingleTenantInfo({
 
       <div
         className="
-          rounded-2xl bg-slate-50
+          rounded-[7px] bg-slate-50
           px-4 py-3
         "
       >

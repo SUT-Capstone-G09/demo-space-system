@@ -2,6 +2,7 @@
 
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -10,22 +11,23 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { 
-  Plus, 
+import {
+  Pencil,
   X,
   Save,
   Loader2
 } from "lucide-react";
+import { Location } from "@/features/areas/types/location";
 import AdminAreaFormFields from "./forms/AdminAreaFormFields";
 import { areaSchema, AreaFormValues } from "../../schemas/area-schema";
-import { useState } from "react";
 
 interface Props {
+  location: Location | null;
   open: boolean;
   onClose: () => void;
 }
 
-export default function AdminAreaCreateDrawer({ open, onClose }: Props) {
+export default function AdminAreaEditDrawer({ location, open, onClose }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const methods = useForm<AreaFormValues>({
@@ -43,23 +45,41 @@ export default function AdminAreaCreateDrawer({ open, onClose }: Props) {
     }
   });
 
+  // Update form values when location changes
+  useEffect(() => {
+    if (location) {
+      methods.reset({
+        name: location.name || "",
+        building: location.building || "",
+        category: location.category || "",
+        size: location.size || "",
+        price: location.price || undefined,
+        description: location.description || "",
+        tenantName: location.tenantName || "",
+        contractEndDate: location.contractEndDate || "",
+        image: location.image || ""
+      });
+    }
+  }, [location, methods]);
+
   const onSubmit = async (data: any) => {
     setIsSubmitting(true);
-    console.log("Submitting Create Area Data:", data);
+    console.log("Updating Area Data:", data);
     
     // Simulate API Call
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     setIsSubmitting(false);
-    methods.reset();
     onClose();
-    alert("บันทึกข้อมูลสำเร็จ!");
+    alert("แก้ไขข้อมูลสำเร็จ!");
   };
+
+  if (!location) return null;
 
   return (
     <Sheet open={open} onOpenChange={onClose}>
-      <SheetContent 
-        side="right" 
+      <SheetContent
+        side="right"
         showCloseButton={false}
         className="w-full sm:max-w-[640px] p-0 border-none bg-white flex flex-col h-full shadow-2xl"
       >
@@ -69,22 +89,27 @@ export default function AdminAreaCreateDrawer({ open, onClose }: Props) {
             <SheetHeader className="px-6 py-5 border-b border-slate-100 flex flex-row items-center justify-between space-y-0 shrink-0 bg-white">
               <div className="flex items-center gap-3">
                 <div className="size-9 rounded-[7px] bg-[#f26522]/10 flex items-center justify-center">
-                  <Plus size={20} className="text-[#f26522]" strokeWidth={3} />
+                  <Pencil size={20} className="text-[#f26522]" strokeWidth={2.5} />
                 </div>
                 
-                <SheetTitle className="text-xl font-bold text-slate-900 tracking-tight">
-                  เพิ่มสถานที่ใหม่
-                </SheetTitle>
+                <div>
+                  <SheetTitle className="text-xl font-bold text-slate-900 tracking-tight">
+                    แก้ไขข้อมูลสถานที่
+                  </SheetTitle>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+                    กำลังแก้ไข: {location.name}
+                  </p>
+                </div>
 
                 <SheetDescription className="sr-only">
-                  ฟอร์มสำหรับกรอกข้อมูลเพื่อเพิ่มสถานที่เช่าใหม่ในระบบ
+                  ฟอร์มสำหรับแก้ไขข้อมูลสถานที่เช่า
                 </SheetDescription>
               </div>
 
               {/* Close Button */}
-              <button 
+              <button
                 type="button"
-                onClick={onClose} 
+                onClick={onClose}
                 className="size-9 rounded-[7px] bg-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-900 transition-all flex items-center justify-center group"
               >
                 <X size={18} className="transition-transform group-hover:rotate-90" />
@@ -92,7 +117,7 @@ export default function AdminAreaCreateDrawer({ open, onClose }: Props) {
             </SheetHeader>
 
             <div className="flex-1 overflow-y-auto custom-scrollbar p-6">
-              <AdminAreaFormFields />
+              <AdminAreaFormFields isEdit />
             </div>
 
             {/* Sticky Footer */}
@@ -106,7 +131,7 @@ export default function AdminAreaCreateDrawer({ open, onClose }: Props) {
               >
                 ยกเลิก
               </Button>
-              
+
               <Button 
                 type="submit"
                 disabled={isSubmitting}
@@ -117,7 +142,7 @@ export default function AdminAreaCreateDrawer({ open, onClose }: Props) {
                 ) : (
                   <Save size={18} />
                 )}
-                {isSubmitting ? "กำลังบันทึก..." : "บันทึกข้อมูล"}
+                {isSubmitting ? "กำลังบันทึก..." : "บันทึกการแก้ไข"}
               </Button>
             </div>
           </form>
