@@ -79,7 +79,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-[99] border-b border-slate-100 shadow-sm">
+      <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-[1001] border-b border-slate-100 shadow-sm">
         <div className="max-w px-6 mx-auto h-20 flex items-center justify-between">
           
           {/* Logo Section */}
@@ -91,7 +91,7 @@ export default function Navbar() {
                 width={48}
                 height={48}
                 className="object-contain h-auto"
-                style={{ height: 'auto' }}
+                style={{ width: 'auto', height: 'auto' }}
                 priority
               />
             </div>
@@ -113,7 +113,7 @@ export default function Navbar() {
                         {item.label}
                         <ChevronDown className="size-4 transition-transform group-data-[state=open]:rotate-180" />
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="start" className="w-56 p-2 z-[100]">
+                      <DropdownMenuContent align="start" className="w-56 p-2 z-[1100]">
                         {item.subItems.map((subItem) => (
                           <DropdownMenuItem key={subItem.href} asChild>
                             <Link
@@ -149,7 +149,7 @@ export default function Navbar() {
                     </button>
                   </DropdownMenuTrigger>
                   
-                  <DropdownMenuContent align="end" className="w-52 p-2 z-[100]">
+                  <DropdownMenuContent align="end" className="w-52 p-2 z-[1100]">
                     {/* User Header */}
                     <div className="px-3 py-2 mb-1 border-b border-slate-50">
                       <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">บัญชีผู้ใช้งาน</p>

@@ -1,6 +1,14 @@
 import { MapPin, ArrowRight, Store } from "lucide-react";
 import { Location } from "@/features/areas/types/location";
 import { cn } from "@/lib/utils";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 
 interface AdminAreaCardProps {
   location: Location;
@@ -48,14 +56,14 @@ export default function AdminAreaCard({
     (location.subStallCount ?? 0) > 0;
 
   return (
-    <div
+    <Card
       onClick={onClick}
       className={cn(
-        "group overflow-hidden rounded-[24px]",
-        "border border-slate-100 bg-white",
-        "shadow-sm transition-all duration-300",
-        "hover:-translate-y-1 hover:shadow-xl",
-        "cursor-pointer"
+        "group overflow-hidden",
+        "bg-white",
+        "transition-all duration-300",
+        "hover:-translate-y-1 hover:shadow-lg",
+        "cursor-pointer flex flex-col gap-0 py-0" // Resetting shadcn py-6 and gap-6 to match original design
       )}
     >
       {/* Image */}
@@ -67,7 +75,7 @@ export default function AdminAreaCard({
           className="
             h-full w-full object-cover
             transition-transform duration-500
-            group-hover:scale-[1.03]
+            group-hover:scale-[1.02]
           "
         />
 
@@ -114,28 +122,27 @@ export default function AdminAreaCard({
       </div>
 
       {/* Content */}
-      <div className="space-y-4 p-5">
-        {/* Title */}
-        <div className="space-y-1.5">
-          <h3
-            className="
-              text-[16px] font-bold leading-snug
-              text-slate-900 line-clamp-1
-            "
-          >
-            {location.name}
-          </h3>
+      <CardHeader className="space-y-1.5 p-5 pb-0">
+        <CardTitle
+          className="
+            text-[16px] font-bold leading-snug
+            text-slate-900 line-clamp-1
+          "
+        >
+          {location.name}
+        </CardTitle>
 
-          <p
-            className="
-              text-[12px] leading-relaxed
-              text-slate-500 line-clamp-2
-            "
-          >
-            {location.address}
-          </p>
-        </div>
+        <CardDescription
+          className="
+            text-[12px] leading-relaxed
+            text-slate-500 line-clamp-2
+          "
+        >
+          {location.address}
+        </CardDescription>
+      </CardHeader>
 
+      <CardContent className="p-5 py-4">
         {/* Dynamic Content */}
         {hasSubStalls ? (
           <SubStallPreview
@@ -147,12 +154,14 @@ export default function AdminAreaCard({
             contractEndDate={location.contractEndDate}
           />
         )}
+      </CardContent>
 
+      <CardFooter className="p-5 pt-0">
         {/* Action */}
         <button
           className={cn(
             "flex w-full items-center justify-center gap-2",
-            "rounded-2xl bg-slate-50 py-3",
+            "rounded-[7px] bg-slate-50 py-3",
             "text-[12px] font-semibold text-slate-600",
             "transition-all duration-200",
             "hover:bg-[#f26522] hover:text-white",
@@ -169,8 +178,8 @@ export default function AdminAreaCard({
             "
           />
         </button>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 }
 
