@@ -12,14 +12,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useRouter } from "next/navigation";
 
 type SortOption = "default" | "name-asc" | "name-desc" | "tenant-desc" | "tenant-asc";
 type ViewMode = "grid" | "list";
 
 export default function AdminTenantAreaGrid() {
-  const [selectedAreaId, setSelectedAreaId] = useState(
-    tenantAreaOptions[0]?.id ?? ""
-  );
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("default");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
@@ -148,8 +147,8 @@ export default function AdminTenantAreaGrid() {
             <AdminTenantAreaCard
               key={area.id}
               area={area}
-              isSelected={selectedAreaId === area.id}
-              onSelect={() => setSelectedAreaId(area.id)}
+              isSelected={false}
+              onSelect={() => router.push(`/admin/tenants/lists/${area.id}`)}
               viewMode="grid"
             />
           ))}
@@ -168,8 +167,8 @@ export default function AdminTenantAreaGrid() {
             <AdminTenantAreaCard
               key={area.id}
               area={area}
-              isSelected={selectedAreaId === area.id}
-              onSelect={() => setSelectedAreaId(area.id)}
+              isSelected={false}
+              onSelect={() => router.push(`/admin/tenants/lists/${area.id}`)}
               viewMode="list"
             />
           ))}

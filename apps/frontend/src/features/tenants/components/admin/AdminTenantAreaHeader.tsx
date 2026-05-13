@@ -1,15 +1,18 @@
 import { tenantAreaSummary } from "@/features/tenants/data/tenant-areas";
+import { AssetBreadcrumb } from "@/components/layout/AssetBreadcrumb";
 
 export default function AdminTenantAreaHeader() {
   return (
     <div className="flex flex-col gap-6 mb-8">
       {/* Title */}
       <div className="space-y-6">
-        <nav className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">
-          <span>Admin</span>
-          <span className="size-1 rounded-full bg-slate-300" />
-          <span className="text-brand-primary">Tenant Directory</span>
-        </nav>
+      <AssetBreadcrumb
+        items={[
+          { label: "Admin", href: "/admin" },
+          { label: "ผู้ประกอบการ", href: "/admin/tenants/lists" },
+          { label: "รายชื่อสถานที่" },
+        ]}
+      />
 
         <div className="space-y-4">
           <h1 className="text-3xl font-extrabold tracking-tight text-slate-950 md:text-4xl lg:text-[2.75rem] lg:leading-[1.15]">
