@@ -10,7 +10,18 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-export function NewsBasicInfo() {
+interface NewsBasicInfoProps {
+  data: {
+    title: string;
+    category: string;
+    details: string;
+    qualifications: string;
+    documents: string;
+  };
+  onChange: (field: string, value: string) => void;
+}
+
+export function NewsBasicInfo({ data, onChange }: NewsBasicInfoProps) {
   return (
     <>
       {/* หัวข้อประกาศ */}
@@ -19,6 +30,8 @@ export function NewsBasicInfo() {
         <Input 
           className="border-zinc-300"
           placeholder="เช่น รับสมัครคัดเลือกผู้ประกอบการจำหน่ายอาหาร ประจำปี 2567" 
+          value={data.title}
+          onChange={(e) => onChange("title", e.target.value)}
         />
       </div>
 
@@ -26,19 +39,30 @@ export function NewsBasicInfo() {
       <div className="space-y-3">
         <Label className="text-base font-bold">หมวดหมู่ประกาศ</Label>
         <div className="flex items-center gap-4">
-          <Select>
+          <Select value={data.category} onValueChange={(val) => onChange("category", val)}>
             <SelectTrigger className="w-[300px] border-zinc-300">
               <SelectValue placeholder="พื้นที่เช่าร้านอาหาร" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="food">พื้นที่เช่าร้านอาหาร</SelectItem>
-              <SelectItem value="retail">พื้นที่ร้านค้าปลีก</SelectItem>
-              <SelectItem value="office">สำนักงาน</SelectItem>
+              <SelectItem value="พื้นที่เช่าร้านอาหาร">พื้นที่เช่าร้านอาหาร</SelectItem>
+              <SelectItem value="พื้นที่ร้านค้าปลีก">พื้นที่ร้านค้าปลีก</SelectItem>
+              <SelectItem value="สำนักงาน">สำนักงาน</SelectItem>
             </SelectContent>
           </Select>
-          <Badge className="bg-[#b18342] hover:bg-[#966b31] text-white px-4 py-1">New Post</Badge>
-          <Badge variant="secondary" className="bg-zinc-200 text-zinc-700 hover:bg-zinc-300 px-4 py-1">Public Desk</Badge>
+          <Badge className="bg-brand-primary hover:bg-brand-primary/90 text-white px-4 py-1 cursor-pointer">New Post</Badge>
+          <Badge variant="secondary" className="bg-brand-secondary/10 text-brand-secondary hover:bg-brand-secondary/20 px-4 py-1 cursor-pointer">Public Desk</Badge>
         </div>
+      </div>
+
+      {/* รายละเอียดประกาศ / รายละเอียดย่อ */}
+      <div className="space-y-3">
+        <Label className="text-base font-bold">รายละเอียดโดยย่อ (สำหรับแสดงหน้าปก)</Label>
+        <Textarea 
+          className="min-h-[140px] border-zinc-300 resize-none" 
+          placeholder="ติดตามประกาศสำคัญ ข่าวประชาสัมพันธ์..." 
+          value={data.details}
+          onChange={(e) => onChange("details", e.target.value)}
+        />
       </div>
 
       {/* รายละเอียดคุณสมบัติผู้สมัคร */}
@@ -47,6 +71,8 @@ export function NewsBasicInfo() {
         <Textarea 
           className="min-h-[140px] border-zinc-300 resize-none" 
           placeholder="- มีสัญชาติไทย&#10;- มีประสบการณ์ด้านโภชนาการไม่น้อยกว่า 3 ปี&#10;- ไม่เคยถูกเลิกจ้างด้วยความผิดวินัย" 
+          value={data.qualifications}
+          onChange={(e) => onChange("qualifications", e.target.value)}
         />
       </div>
 
@@ -56,6 +82,8 @@ export function NewsBasicInfo() {
         <Textarea 
           className="min-h-[140px] border-zinc-300 resize-none" 
           placeholder="- สำเนาบัตรประชาชน&#10;- ทะเบียนบ้าน&#10;- หนังสือรับรองการจดทะเบียนนิติบุคคล&#10;- แผนผังการจัดร้านเบื้องต้น" 
+          value={data.documents}
+          onChange={(e) => onChange("documents", e.target.value)}
         />
       </div>
     </>
