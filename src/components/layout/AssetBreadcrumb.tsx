@@ -28,14 +28,19 @@ export function AssetBreadcrumb({ items }: BreadcrumbProps) {
           return (
             <React.Fragment key={index}>
               <BreadcrumbItem>
+                {/* ถ้าไม่ใช่รายการสุดท้าย และมี Link ให้แสดงเป็น Link */}
                 {!isLast && item.href ? (
                   <BreadcrumbLink asChild>
-                    <Link href={item.href} className="hover:text-[#E9652B] transition-colors">
+                    <Link href={item.href} className="hover:text-[#F26522] transition-colors">
                       {item.label}
                     </Link>
                   </BreadcrumbLink>
+                ) : !isLast ? (
+                  // ถ้าไม่ใช่รายการสุดท้าย และไม่มี Link ให้แสดงเป็น Text ธรรมดา (สีเทา)
+                  <span className="text-muted-foreground">{item.label}</span>
                 ) : (
-                  <BreadcrumbPage className={isLast ? "text-[#E9652B] font-bold" : ""}>
+                  // ถ้าเป็นรายการสุดท้าย ให้แสดงเป็นสีส้มตัวหนา
+                  <BreadcrumbPage className="text-[#F26522] font-bold">
                     {item.label}
                   </BreadcrumbPage>
                 )}

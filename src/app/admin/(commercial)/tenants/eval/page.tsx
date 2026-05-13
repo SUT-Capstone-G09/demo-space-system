@@ -1,7 +1,11 @@
-export default function EvalPage() {
+import { AdminEvalTable} from "@/features/evaluations/components/AdminEvalTable"
+import { AdminEvalTableHeader } from "@/features/evaluations/components/AdminEvalTableHeader"
+
+export default function DashboardPage() {
     return (
-        <div className="flex justify-center min-h-screen">
-            <h1>Eval Page</h1>
+        <div className="space-y-10 p-8">
+            <AdminEvalTableHeader />
+            <AdminEvalTable />
         </div>
-    );
+    )
 }
