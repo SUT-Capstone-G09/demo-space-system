@@ -54,9 +54,9 @@ export default function AdminAreaCard({
       onClick={onClick}
       className={cn(
         "group overflow-hidden",
-        "bg-white w-full max-w-[300px] mx-auto",
-        "transition-all duration-500 ease-out",
-        "hover:-translate-y-1.5 hover:shadow-[0_20px_40px_rgba(0,0,0,0.1)]",
+        "bg-white w-full",
+        "transition-all duration-300",
+        "hover:shadow-md hover:border-[#f26522]/20 hover:-translate-y-1",
         "cursor-pointer flex flex-col gap-0 py-0 border-slate-200/60 rounded-[7px]"
       )}
     >
@@ -156,8 +156,8 @@ export default function AdminAreaCard({
             "flex w-full items-center justify-center gap-2",
             "rounded-[7px] bg-slate-50 py-3",
             "text-[12px] font-semibold text-slate-600",
-            "transition-all duration-200",
-            "hover:bg-[#f26522] hover:text-white",
+            "transition-all duration-300",
+            "group-hover:bg-brand-primary group-hover:text-white",
             "active:scale-[0.98]"
           )}
         >

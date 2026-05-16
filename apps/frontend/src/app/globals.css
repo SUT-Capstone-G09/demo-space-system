@@ -173,6 +173,13 @@ html {
   scrollbar-width: thin;
   scrollbar-color: #e2e8f0 transparent;
 }
+
+@layer components {
+  .page-title {
+    @apply text-3xl font-black tracking-tight text-slate-900;
+  }
+}
+
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
     display: none;

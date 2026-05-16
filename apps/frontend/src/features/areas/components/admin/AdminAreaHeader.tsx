@@ -2,12 +2,12 @@
 
 import React from "react";
 import {
-  Plus,
-  History
+  Plus
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import AdminAreaCreateDrawer from "./AdminAreaCreateDrawer";
+import { AssetBreadcrumb } from "@/components/layout/AssetBreadcrumb";
 
 export default function AdminAreaHeader() {
   const [isCreateDrawerOpen, setIsCreateDrawerOpen] = React.useState(false);
@@ -18,21 +18,19 @@ export default function AdminAreaHeader() {
       <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div className="space-y-4">
           <div className="flex items-center justify-between lg:justify-start lg:gap-4">
-            <nav className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">
-              <span>Admin</span>
-              <span className="size-1 rounded-full bg-slate-300" />
-              <span className="text-[#f26522]">Areas Management</span>
-            </nav>
+            <AssetBreadcrumb 
+              items={[
+                { label: "Admin", href: "/admin" },
+                { label: "จัดการพื้นที่" }
+              ]} 
+            />
           </div>
 
-          {/* Title & Description */}
-          <div className="space-y-1.5">
-            <h1 className="text-3xl font-black tracking-tight text-slate-900 md:text-4xl">
+          {/* Title Section */}
+          <div>
+            <h1 className="page-title">
               จัดการพื้นที่เช่า
             </h1>
-            <p className="text-sm font-medium text-slate-500">
-              ตรวจสอบสถานะ วิเคราะห์การใช้งาน และบริหารจัดการพื้นที่เชิงพาณิชย์ทั้งหมด
-            </p>
           </div>
         </div>
 
