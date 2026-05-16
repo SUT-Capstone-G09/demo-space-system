@@ -77,7 +77,7 @@ export default function AdminAreaGrid({
 
               {/* Grid View */}
               {viewMode === "grid" && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6">
                   {items.map((location) => (
                     <AdminAreaCard
                       key={location.id}
@@ -130,7 +130,7 @@ export default function AdminAreaGrid({
   );
 }
 
-function ViewToggleButton({ isActive, onClick, icon: Icon }: { isActive: boolean; onClick: () => void; icon: any }) {
+function ViewToggleButton({ isActive, onClick, icon: Icon }: { isActive: boolean; onClick: () => void; icon: React.ElementType }) {
   return (
     <button
       onClick={onClick}
